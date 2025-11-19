@@ -1,1 +1,88 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
 
+body {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.app-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+.app-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.app-header h1 {
+    color: #4361ee;
+    font-size: 2.5em;
+    margin-bottom: 10px;
+}
+
+.profile-section, .ai-plan-section, .performance-section {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+}
+
+.profile-form {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.profile-form select, .profile-form input {
+    padding: 10px;
+    border: 2px solid #4361ee;
+    border-radius: 8px;
+    flex: 1;
+    min-width: 150px;
+}
+
+button {
+    background: #4361ee;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover {
+    background: #3a0ca3;
+}
+
+.plan-container {
+    background: white;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 15px 0;
+    border-left: 4px solid #4361ee;
+}
+
+.generate-btn {
+    background: #f72585;
+    width: 100%;
+    padding: 15px;
+    font-size: 1.1em;
+}
+
+.chart-container {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+}
