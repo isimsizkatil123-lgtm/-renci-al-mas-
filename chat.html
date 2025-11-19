@@ -1,48 +1,74 @@
-class AICoach {
-    constructor() {
-        this.userData = this.loadUserData();
-    }
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>CrissAI - Sohbet</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="chat-body">
+    <!-- HEADER -->
+    <header class="chat-header">
+        <button class="menu-btn" onclick="toggleSidebar()">☰</button>
+        <h1>CrissAI</h1>
+        <button class="new-chat-btn" onclick="newChat()">+</button>
+    </header>
 
-    loadUserData() {
-        const saved = localStorage.getItem('akilmentorData');
-        return saved ? JSON.parse(saved) : {
-            examType: 'yks',
-            studyHours: 3,
-            performance: {},
-            studyHistory: []
-        };
-    }
+    <!-- SIDEBAR -->
+    <div class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <h3>Sohbetlerim</h3>
+            <button class="close-sidebar" onclick="toggleSidebar()">×</button>
+        </div>
+        <div class="chat-history" id="chatHistory">
+            <!-- Dinamik olarak yüklenecek -->
+        </div>
+        <div class="sidebar-footer">
+            <button class="sidebar-item" onclick="showProfile()">
+                👤 Profilim
+            </button>
+            <button class="sidebar-item logout-btn" onclick="logout()">
+                🚪 Çıkış Yap
+            </button>
+        </div>
+    </div>
 
-    saveUserData() {
-        localStorage.setItem('akilmentorData', JSON.stringify(this.userData));
-    }
+    <!-- ANA CHAT ALANI -->
+    <div class="chat-main" id="chatMain">
+        <div class="chat-messages" id="chatMessages">
+            <!-- Mesajlar buraya gelecek -->
+        </div>
+        
+        <!-- MESAJ GİRİŞ -->
+        <div class="chat-input-container">
+            <div class="input-group">
+                <input type="text" id="messageInput" placeholder="CrissAI'ye mesaj yazın..." 
+                       onkeypress="handleKeyPress(event)">
+                <button onclick="sendMessage()" class="send-btn">Gönder</button>
+            </div>
+        </div>
+    </div>
 
-    async generateStudyPlan() {
-        // AI planı oluşturma simülasyonu
-        const plan = {
-            daily: [
-                { subject: 'Matematik', topic: 'Problemler', duration: 45, priority: 'high' },
-                { subject: 'Türkçe', topic: 'Paragraf Soruları', duration: 30, priority: 'medium' },
-                { subject: 'Geometri', topic: 'Üçgenler', duration: 35, priority: 'medium' },
-                { subject: 'Fizik', topic: 'Hareket', duration: 40, priority: 'low' }
-            ],
-            weeklyGoal: 'Bu hafta temel konuların %70 tamamlanacak',
-            focusArea: 'Matematik problem çözme hızını artır'
-        };
+    <!-- PROFİL MODAL -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>👤 Profilim</h2>
+                <button class="close-modal" onclick="closeProfile()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-info">
+                    <p><strong>Kullanıcı Adı:</strong> <span id="profileUsername">-</span></p>
+                    <p><strong>E-posta:</strong> <span id="profileEmail">-</span></p>
+                    <p><strong>Kayıt Tarihi:</strong> <span id="profileDate">-</span></p>
+                </div>
+                <button class="logout-btn" onclick="logout()">🚪 Çıkış Yap</button>
+            </div>
+        </div>
+    </div>
 
-        return plan;
-    }
-
-    analyzePerformance() {
-        const analysis = {
-            strongTopics: ['Paragraf', 'Temel Matematik'],
-            weakTopics: ['Geometri', 'Fizik Problemleri'],
-            recommendation: 'Geometri çalışma süresini %20 artır',
-            weeklyProgress: 65
-        };
-
-        return analysis;
-    }
-}
-
-window.aiCoach = new AICoach();
+    <script src="js/auth.js"></script>
+    <script src="js/chat.js"></script>
+    <script src="js/api.js"></script>
+</body>
+</html>
