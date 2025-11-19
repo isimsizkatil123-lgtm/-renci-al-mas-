@@ -2,7 +2,7 @@
 class CrissAIAPI {
     constructor() {
         this.baseURL = 'https://api.crissai.com/v1';
-        this.apiKey = 'crissai_demo_key_2024';
+        this.apiKey = 'AIzaSyBAaEP5bDApq4WYA3xz7duD_yLkrQFYU08';
     }
 
     async makeRequest(endpoint, data) {
