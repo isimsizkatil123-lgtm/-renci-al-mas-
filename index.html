@@ -3,50 +3,111 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AkılMentor - AI Çalışma Koçu</title>
+    <title>CrissAI - Akıllı Çalışma Koçu</title>
     <link rel="stylesheet" href="css/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <div class="app-container">
         <!-- HEADER -->
         <header class="app-header">
-            <h1>🎯 AkılMentor</h1>
-            <p>AI Destekli Kişisel Çalışma Koçun</p>
+            <h1>🧠 CrissAI</h1>
+            <p>Yapay Zeka Destekli Kişisel Çalışma Koçun</p>
+            <div class="ai-status">
+                <span class="status-dot"></span>
+                <span>AI Aktif</span>
+            </div>
         </header>
 
         <!-- PROFİL BÖLÜMÜ -->
         <section class="profile-section">
             <h2>👤 Öğrenci Profili</h2>
             <div class="profile-form">
-                <select id="examType">
-                    <option value="lgs">LGS</option>
-                    <option value="yks">YKS</option>
-                    <option value="dgs">DGS</option>
-                </select>
-                <input type="number" id="studyHours" placeholder="Günlük çalışma saati" min="1" max="8">
-                <button onclick="saveProfile()">Profili Kaydet</button>
+                <div class="input-group">
+                    <label>Sınav Hedefi:</label>
+                    <select id="examType">
+                        <option value="lgs">LGS</option>
+                        <option value="yks" selected>YKS</option>
+                        <option value="dgs">DGS</option>
+                        <option value="ales">ALES</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Günlük Çalışma (saat):</label>
+                    <input type="number" id="studyHours" value="4" min="1" max="12">
+                </div>
+                <div class="input-group">
+                    <label>Başlangıç Tarihi:</label>
+                    <input type="date" id="startDate">
+                </div>
+                <button onclick="saveProfile()" class="save-btn">✅ Profili Kaydet</button>
             </div>
         </section>
 
-        <!-- AI PLAN BÖLÜMÜ -->
+        <!-- CRISSAI PLAN BÖLÜMÜ -->
         <section class="ai-plan-section">
-            <h2>🤖 AI Çalışma Planı</h2>
-            <div id="dailyPlan" class="plan-container">
-                <p>Planınız burada görünecek...</p>
+            <h2>🤖 CrissAI Çalışma Planı</h2>
+            <div class="ai-thinking" id="aiThinking" style="display: none;">
+                <div class="thinking-animation">CrissAI plan oluşturuyor...</div>
             </div>
-            <button onclick="generatePlan()" class="generate-btn">Plan Oluştur</button>
+            <div id="dailyPlan" class="plan-container">
+                <p class="placeholder">Profilini kaydettikten sonra "Plan Oluştur" butonuna tıkla!</p>
+            </div>
+            <button onclick="generateCrissAIPlan()" class="generate-btn">🚀 CrissAI Plan Oluştur</button>
         </section>
 
-        <!-- PERFORMANS TAKİP -->
+        <!-- GERÇEK ZAMANLI TAKİP -->
+        <section class="live-tracking">
+            <h2>📈 Gerçek Zamanlı İlerleme</h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalStudyTime">0</div>
+                    <div class="stat-label">Toplam Çalışma (saat)</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="completedTopics">0</div>
+                    <div class="stat-label">Tamamlanan Konular</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="successRate">0%</div>
+                    <div class="stat-label">Başarı Oranı</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="aiScore">85</div>
+                    <div class="stat-label">CrissAI Puanı</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PERFORMANS ANALİZİ -->
         <section class="performance-section">
-            <h2>📊 Performans Analizim</h2>
+            <h2>📊 CrissAI Performans Analizi</h2>
             <div class="chart-container">
                 <canvas id="performanceChart"></canvas>
+            </div>
+            <div class="ai-recommendations" id="aiRecommendations">
+                <!-- AI önerileri buraya gelecek -->
+            </div>
+        </section>
+
+        <!-- CRISSAI SOHBET -->
+        <section class="chat-section">
+            <h2>💬 CrissAI ile Sohbet</h2>
+            <div class="chat-container">
+                <div id="chatMessages" class="chat-messages">
+                    <div class="message ai-message">
+                        <strong>CrissAI:</strong> Merhaba! Çalışma planı oluşturmak için profilini kaydet ve plan oluştur butonuna tıkla! 🚀
+                    </div>
+                </div>
+                <div class="chat-input">
+                    <input type="text" id="chatInput" placeholder="CrissAI'ye soru sor...">
+                    <button onclick="sendMessage()">Gönder</button>
+                </div>
             </div>
         </section>
     </div>
 
-    <script src="js/ai-coach.js"></script>
+    <script src="js/criss-ai.js"></script>
     <script src="js/charts.js"></script>
     <script src="js/script.js"></script>
 </body>
