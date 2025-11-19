@@ -1,58 +1,81 @@
-// Gerçek API bağlantıları
+// GOOGLE AI API ENTEGRASYONU - KEY SABIT
 class CrissAIAPI {
     constructor() {
-        this.baseURL = 'https://api.crissai.com/v1';
+        // SABIT API KEY - SENIN KEYIN BURADA
         this.apiKey = 'AIzaSyBAaEP5bDApq4WYA3xz7duD_yLkrQFYU08';
+        this.baseURL = 'https://generativelanguage.googleapis.com/v1';
+        this.model = 'gemini-pro';
+        this.isActive = true;
     }
 
-    async makeRequest(endpoint, data) {
+    // GOOGLE AI CHAT MESAJI
+    async sendChatMessage(message, chatId) {
+        if (!this.isActive) {
+            throw new Error('API devre dışı');
+        }
+
         try {
-            const response = await fetch(`${this.baseURL}${endpoint}`, {
+            console.log('🔗 Google AI APIye bağlanılıyor...');
+            
+            const response = await fetch(`${this.baseURL}/models/${this.model}:generateContent?key=${this.apiKey}`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${this.apiKey}`,
-                    'X-User-Token': localStorage.getItem('crissai_token')
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify({
+                    contents: [{
+                        parts: [{
+                            text: message
+                        }]
+                    }],
+                    generationConfig: {
+                        temperature: 0.7,
+                        maxOutputTokens: 1000,
+                        topP: 0.8,
+                        topK: 40
+                    }
+                })
             });
 
+            console.log('📡 API Yanıt Durumu:', response.status);
+
             if (!response.ok) {
-                throw new Error(`API hatası: ${response.status}`);
+                const errorData = await response.json();
+                throw new Error(errorData.error?.message || `HTTP Hatası: ${response.status}`);
             }
 
-            return await response.json();
+            const data = await response.json();
+            console.log('✅ API Başarılı Yanıt:', data);
+            
+            if (data.candidates && data.candidates[0] && data.candidates[0].content) {
+                return { 
+                    message: data.candidates[0].content.parts[0].text,
+                    usage: data.usageMetadata
+                };
+            } else {
+                throw new Error('API geçersiz yanıt formatı');
+            }
+
         } catch (error) {
-            console.error('API bağlantı hatası:', error);
-            throw error;
+            console.error('❌ Google AI API hatası:', error);
+            throw new Error(`Google AI bağlantı hatası: ${error.message}`);
         }
     }
 
-    // Chat mesajı gönder
-    async sendChatMessage(message, chatId) {
-        return await this.makeRequest('/chat', {
-            message: message,
-            chat_id: chatId,
-            model: 'gpt-4',
-            temperature: 0.7
-        });
-    }
-
-    // Kullanıcı girişi
-    async userLogin(username, password) {
-        return await this.makeRequest('/auth/login', {
-            username: username,
-            password: password
-        });
-    }
-
-    // Kullanıcı kaydı
-    async userRegister(username, email, password) {
-        return await this.makeRequest('/auth/register', {
-            username: username,
-            email: email,
-            password: password
-        });
+    // API DURUM KONTROLÜ
+    async checkAPIStatus() {
+        try {
+            const testResponse = await this.sendChatMessage('Merhaba', 'test');
+            return { 
+                status: 'active',
+                message: '✅ Google AI API bağlantısı başarılı!'
+            };
+        } catch (error) {
+            return {
+                status: 'error',
+                message: `❌ API Hatası: ${error.message}`
+            };
+        }
     }
 }
 
